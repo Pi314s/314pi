@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The World of Pi</title>
+  <style>
+    :root {
+        --primary-color: #6c5ce7;
+        --primary-hover: #5a4bd1;
+        --background-dark: #0a0b0e;
+        --card-dark: #151720;
+        --text-light: #ffffff;
+        --text-gray: #a8a8b3;
+        --gradient-1: linear-gradient(135deg, #6c5ce7 0%, #8075ff 100%);
+        --gradient-2: linear-gradient(135deg, #151720 0%, #1a1d2b 100%);
+        --shadow-1: 0 4px 20px rgba(0, 0, 0, 0.15);
+        --shadow-2: 0 8px 30px rgba(0, 0, 0, 0.25);
+        --glass-bg: rgba(21, 23, 32, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+        --glass-blur: blur(12px);
+    }
+
+    body {
+        background: black;
+        min-height: 100vh;
+        color: var(--text-light);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+
+    .nav-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    header {
+        background: var(--card-dark);
+        padding: 1.25rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        color: var(--primary-color);
+        font-weight: normal;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .logo h1:hover {
+        transform: scale(1.1);
+    }
+
+    nav a {
+        color: var(--text-gray);
+        text-decoration: none;
+        margin: 0 1.5rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    nav a:hover {
+        background: var(--gradient-1);
+        color: var(--text-light);
+    }
+
+    .trade-section {
+        padding: 3rem 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--text-light);
+    }
+
+    .price-card, .token-card {
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        box-shadow: var(--glass-shadow);
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+    }
+
+    /* Top-left corner glow */
+    .price-card::before, .token-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 0% 0%,
+            rgba(255, 255, 255, 0.15),
+            transparent 50%
+        );
+        z-index: -1;
+    }
+
+    /* Bottom-right corner glow */
+    .price-card::after, .token-card::after {
+        content: '';
+        position: absolute;
+        bottom: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 100% 100%,
+            rgba(255, 255, 255, 0.1),
+            transparent 50%
+        );
+        z-index: -1;
+    }
+
+    /* Additional corner highlights */
+    .price-card .corner-highlights, .token-card .corner-highlights {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+
+    .price-card .corner-highlights::before, .token-card .corner-highlights::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(
+            circle at 100% 0%,
+            rgba(255, 255, 255, 0.12),
+            transparent 70%
+        );
+    }
+
+    .price-card .corner-highlights::after, .token-card .corner-highlights::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(
+            circle at 0% 100%,
+            rgba(255, 255, 255, 0.12),
+            transparent 70%
+        );
+    }
+
+    /* Enhanced glass background */
+    .price-card, .token-card {
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0.05) 25%,
+            rgba(21, 23, 32, 0.8)
+        );
+    }
+
+    .features-list {
+        list-style: none;
+        padding: 0;
+        margin: 2rem 0;
+    }
+
+    .features-list li {
+        color: var(--text-gray);
+        margin: 1.25rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.1rem;
+    }
+
+    .features-list li::before {
+        content: "✓";
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+
+    .chart-link {
+        margin-top: 2.5rem;
+        padding-top: 2.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+    }
+
+    .chart-link h3 {
+        color: var(--text-light);
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .chart-link p {
+        color: var(--text-gray);
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-primary {
+        background-image: linear-gradient(to right, #0099f7, #f11712);
+        color: var(--text-light);
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 198, 10, 0.5);
+    }
+
+    .facts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .fact-card {
+        background: var(--card-dark);
+        border-radius: 20px;
+        padding: 2.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: var(--shadow-2);
+    }
+
+    footer {
+        background: var(--card-dark);
+        padding: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .copyright {
+        color: var(--text-gray);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        .facts-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        nav a {
+            margin: 0 0.5rem;
+            padding: 0.5rem 0.75rem;
+        }
+        
+        .trade-section {
+            padding: 3rem 1rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+        }
+    }
+
+    .token-section {
+        padding: 2rem 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .token-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .token-card:last-child {
+        grid-column: 1 / -1;
+    }
+
+    .token-card h3 {
+        color: var(--text-light);
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .info-grid {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
+
+    .label {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+    }
+
+    .value {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        text-align: right;
+    }
+
+    .small-text {
+        font-size: 0.85rem;
+        word-break: break-all;
+        max-width: 300px;
+    }
+
+    @media (max-width: 1024px) {
+        .token-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .token-card:last-child {
+            grid-column: auto;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .info-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .value {
+            text-align: left;
+        }
+    }
+
+    .view-more {
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .btn-outline {
+        background: transparent;
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .btn-outline:hover {
+        background: var(--primary-color);
+        color: var(--text-light);
+    }
+
+    /* Add subtle hover effect */
+    .price-card:hover, .token-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--glass-shadow),
+                    0 10px 40px -10px rgba(108, 92, 231, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    /* Improve text readability on glass */
+    .info-item {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Add gradient border glow */
+    .token-card h3, .price-card h3 {
+        position: relative;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .token-card h3::after, .price-card h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+            90deg,
+            var(--glass-border),
+            rgba(108, 92, 231, 0.3),
+            var(--glass-border)
+        );
+    }
+
+    .ecosystem-section {
+        padding: 1.5rem 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .ecosystem-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .ecosystem-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .features-list a {
+        color: var(--text-gray);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .features-list a:hover {
+        color: var(--primary-color);
+    }
+
+    .features-list li::before {
+        display: none;
+    }
+
+    .price-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .price-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .price-link:hover {
+        color: var(--primary-hover);
+        text-decoration: underline;
+    }
+
+    .balance-section {
+        padding: 1.5rem 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .balance-checker {
+        padding: 1rem 0;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .address-input {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        color: var(--text-light);
+        font-size: 1rem;
+    }
+
+    .address-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
+
+    .helper-text {
+        color: var(--text-gray);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .balance-info {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--glass-border);
+    }
+
+    .info-grid {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+    }
+
+    .small-text {
+        font-size: 0.85rem;
+        word-break: break-all;
+    }
+
+    .view-more {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+
+    .loading {
+        text-align: center;
+        color: var(--text-gray);
+        padding: 1rem 0;
+    }
+
+    .error-message {
+        color: #ff6b6b;
+        text-align: center;
+        padding: 1rem 0;
+    }
+
+    /* Golden blurry shadow effect with heartbeat animation */
+    .colorful-shadow {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        pointer-events: none;
+        transition: transform 0.1s ease;
+        background: radial-gradient(circle, rgba(255, 215, 0, 0.7), rgba(255, 215, 0, 0.5));
+        z-index: 0; /* Behind other elements */
+        transform: translate(-50%, -50%);
+        filter: blur(30px); /* Increased blur effect */
+        animation: heartbeat 1.5s infinite; /* Apply heartbeat animation */
+    }
+
+    /* Heartbeat animation */
+    @keyframes heartbeat {
+        0%, 100% {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(1.2); /* Scale up */
+        }
+    }
+
+    .ecosystem-grid {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .token-card {
+        flex: 1;
+    }
+
+    .pi-symbols {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none; /* Allow clicks to pass through */
+        overflow: hidden; /* Prevent overflow */
+        z-index: -1; /* Ensure it's behind other elements */
+    }
+
+    .pi-symbol {
+        position: absolute;
+        font-size: 2rem; /* Adjust size as needed */
+        color: white; /* Base color of the symbol */
+        opacity: 0.8; /* Slight transparency */
+        animation: glitch 2s steps(100) infinite; /* Add glitch animation */
+    }
+
+    @keyframes glitch {
+        0% {
+            text-shadow: 2px 0 red, -2px 0 blue;
+            transform: translate(0);
+        }
+        10% {
+            text-shadow: 2px 0 red, -2px 0 blue;
+            transform: translate(-1px, -1px);
+        }
+        20% {
+            text-shadow: -2px 0 green, 2px 0 yellow;
+            transform: translate(1px, 1px);
+        }
+        30% {
+            text-shadow: 2px 0 blue, -2px 0 red;
+            transform: translate(-1px, 0);
+        }
+        40% {
+            text-shadow: -2px 0 green, 2px 0 yellow;
+            transform: translate(1px, 1px);
+        }
+        50% {
+            text-shadow: 2px 0 red, -2px 0 blue;
+            transform: translate(0);
+        }
+        60% {
+            text-shadow: -2px 0 green, 2px 0 yellow;
+            transform: translate(-1px, -1px);
+        }
+        70% {
+            text-shadow: 2px 0 blue, -2px 0 red;
+            transform: translate(1px, 0);
+        }
+        80% {
+            text-shadow: -2px 0 green, 2px 0 yellow;
+            transform: translate(0, 1px);
+        }
+        90% {
+            text-shadow: 2px 0 red, -2px 0 blue;
+            transform: translate(-1px, -1px);
+        }
+        100% {
+            text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+            transform: translate(0);
+        }
+    }
+
+    .pi-logo {
+        font-size: 2rem; /* Reduced size by approximately 60% */
+        color: white; /* Base color of the symbol */
+        opacity: 0.8; /* Slight transparency */
+        animation: glitch 2s steps(100) infinite; /* Add glitch animation */
+        display: block; /* Ensure it behaves like a block element */
+        text-align: center; /* Center the logo */
+    }
+
+    .margin-top {
+        margin-top: 2rem; /* Adjust the value as needed for spacing */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="pi-logo">𝛑</span>
+        </div>
+        <nav>
+            <a href="#about">About 𝛑</a>
+            <a href="#trade">Exchange</a>
+            <a href="#ecosystem">Ecosystem</a>
+        </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Token Info Section -->
+    <section id="token-info" class="token-section">
+        <h2>𝛑 Token Details</h2>
+        <div class="token-grid">
+            <div class="token-card">
+                <div class="corner-highlights"></div>
+                <h3>Token Information</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Token Type</span>
+                        <span class="value">BRC-20</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Status</span>
+                        <span class="value">Completed (100.00%)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Total Supply</span>
+                        <span class="value">3,141,592,653,589,793</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Minted Amount</span>
+                        <span class="value">3,141,592,653,589,793</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Limit per mint</span>
+                        <span class="value">149,599,650,171</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Decimals</span>
+                        <span class="value">18</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="token-card">
+                <div class="corner-highlights"></div>
+                <h3>Inscription Details</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Platform</span>
+                        <span class="value">Unisat</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Inscription ID</span>
+                        <span class="value small-text">325bd996dbe371ad63393e893bd5efe95200b1490fe6574d395c3339551f2f93i0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Deploy By</span>
+                        <span class="value small-text">bc1qjvjj5x6lzyvk70x96ldm7p5aks5tvnrnet6thp</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Deploy Time</span>
+                        <span class="value">5/10/2023, 4:29:00 PM</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Completed Time</span>
+                        <span class="value">12/23/2023, 9:35:13 PM</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="token-card">
+                <div class="corner-highlights"></div>
+                <h3>Network Statistics</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Current Holders</span>
+                        <span class="value">40,104</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Total Transactions</span>
+                        <span class="value">355,067</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Inscription Range</span>
+                        <span class="value">#5496738 - #50855505</span>
+                    </div>
+                </div>
+                <div class="view-more">
+                    <a href="https://unisat.io/brc20/𝛑" target="_blank" class="btn btn-outline">View on Unisat</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ecosystem Section -->
+    <section id="ecosystem" class="ecosystem-section">
+        <h2>Bitcoin Ecosystem</h2>
+        <div class="ecosystem-grid">
+            <div class="token-card">
+                <h3>Marketplaces</h3>
+                <ul class="features-list">
+                    <li><a href="https://unisat.io" target="_blank">UniSat</a></li>
+                    <li><a href="https://magiceden.io/ordinals" target="_blank">Magic Eden</a></li>
+                    <li><a href="https://www.superex.com" target="_blank">SuperEX</a></li>
+                    <li><a href="https://www.okx.com" target="_blank">OKX</a></li>
+                    <li><a href="https://www.dotswap.app/" target="_blank">DotSwap</a></li>
+                    <li><a href="https://ordinalswallet.com/collection/brc20-%F0%9D%9B%91" target="_blank">Ordinals Wallet</a></li>
+                </ul>
+            </div>
+
+            <div class="token-card">
+                <h3>Wallets</h3>
+                <ul class="features-list">
+                    <li><a href="https://unisat.io" target="_blank">UniSat</a></li>
+                    <li><a href="https://xverse.app" target="_blank">XVerse</a></li>
+                    <li><a href="https://ordinalsafe.xyz" target="_blank">OrdinalSafe</a></li>
+                    <li><a href="https://wallet.hiro.so" target="_blank">Hiro Wallet</a></li>
+                </ul>
+            </div>
+
+            <div class="token-card">
+                <h3>Explorers</h3>
+                <ul class="features-list">
+                    <li><a href="https://ord.io" target="_blank">Ord.io</a></li>
+                    <li><a href="https://ordinalshub.com" target="_blank">Ordinal Hub</a></li>
+                    <li><a href="https://ordinals.com" target="_blank">Ordinals.com</a></li>
+                    <li><a href="https://luminex.io" target="_blank">Luminex</a></li>
+                    <li><a href="https://ordinalscan.com" target="_blank">OrdinalScan</a></li>
+                </ul>
+            </div>
+
+            <div class="token-card">
+                <h3>Tools</h3>
+                <ul class="features-list">
+                    <li><a href="https://ordinalnews.io/ordinaltools/" target="_blank">Ordinal Tools</a></li>
+                    <li><a href="https://ordinalnews.io/ordinals/" target="_blank">Ordinal News</a></li>
+                    <li><a href="https://ordinalnews.io/ordinals/inscriptions/" target="_blank">Inscriptions</a></li>
+                    <li><a href="https://ordinalnews.io/ordinals/marketplaces/" target="_blank">Marketplaces</a></li>
+                    <li><a href="https://ordinalnews.io/ordinals/wallets/" target="_blank">Wallets</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="ecosystem-grid margin-top">
+            <div class="token-card">
+                <h3>Community</h3>
+                <ul class="features-list">
+                    <li><a href="https://x.com/pi3141s" target="_blank">Twitter</a></li>
+                    <li><a href="https://t.me/brc20picoin" target="_blank">Telegram</a></li>
+                </ul>
+            </div>
+
+            <div class="token-card">
+                <h3>𝛑 Inscription</h3>
+                <ul class="features-list">
+                    <li><a href="https://unisat.io/inscription/6220fe9cdaf0106c57b79ef3ebc1169e39253bf631597865fd33169fdb24ce0bi0" target="_blank">Inscription Details</a></li>
+                </ul>
+            </div>
+
+            <div class="token-card">
+                <h3>Analytics</h3>
+                <ul class="features-list">
+                    <li><a href="https://dune.com" target="_blank">Dune Analytics</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Balance Checker Section -->
+    <section id="balance-checker" class="balance-section">
+        <div class="token-card">
+            <h3>Check Your Balance</h3>
+            <div class="balance-checker">
+                <div class="input-group">
+                    <input type="text" id="addressInput" placeholder="Enter your BTC address" class="address-input">
+                    <button onclick="checkPiBalance()" class="btn btn-primary">Check Balance</button>
+                </div>
+                <p class="helper-text">Enter your BTC address to view your 𝛑 balance on Unisat</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trading Section (Moved to the end) -->
+    <section id="trade" class="trade-section">
+        <h2>Exchange</h2>
+        <div class="trade-container">
+            <div class="price-card">
+                <div class="corner-highlights"></div>
+                <h3>Trade 𝛑 on:</h3>
+                <ul class="features-list">
+                    <li>
+                        <a href="https://www.superex.com/trade/𝛑_USDT" target="_blank" class="btn btn-primary">Trade on SuperEX</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+        <p class="copyright">© 2024 The World of 𝛑. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+  function checkPiBalance() {
+      const address = document.getElementById('addressInput').value.trim();
+      
+      if (!address) {
+          alert('Please enter a BTC address');
+          return;
+      }
+
+      // Redirect to Unisat with the address and 𝛑 ticker
+      const unisatUrl = `https://unisat.io/brc20?q=${address}&tick=𝛑`;
+      window.open(unisatUrl, '_blank');
+  }
+
+  // Add Enter key support
+  document.getElementById('addressInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+          checkPiBalance();
+      }
+  });
+  </script>
+
+  <div class="pi-symbols"></div>
+
+  <script>
+    const piContainer = document.querySelector('.pi-symbols');
+    const numberOfSymbols = 20; // Number of "𝛑" symbols
+
+    // Function to generate a random color
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    for (let i = 0; i < numberOfSymbols; i++) {
+        const piElement = document.createElement('div');
+        piElement.classList.add('pi-symbol');
+        piElement.innerText = '𝛑';
+        
+        // Randomize position
+        piElement.style.left = Math.random() * 100 + 'vw'; // Random horizontal position
+        piElement.style.top = Math.random() * 100 + 'vh'; // Random vertical position
+        
+        // Randomize animation duration
+        piElement.style.animationDuration = Math.random() * 5 + 5 + 's'; // Between 5s and 10s
+        
+        // Assign a random color to each symbol
+        piElement.style.color = getRandomColor(); // Set random color
+        
+        piContainer.appendChild(piElement);
+    }
+  </script>
+</body>
+</html>
