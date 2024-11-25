@@ -693,6 +693,29 @@
         box-shadow: var(--shadow-2);
         transition: transform 0.3s ease;
     }
+
+    .holders-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .holders-table th, .holders-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .holders-table th {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .holders-table tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .holders-table tr:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
   </style>
 </head>
 <body>
@@ -895,6 +918,145 @@
                     </li>
                 </ul>
             </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section id="statistics" class="statistics-section">
+        <h2 style="text-align: center;">Top Pi Holders</h2>
+        <div class="price-card">
+            <table class="holders-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Address</th>
+                        <th>Percentage</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>bc1p0...sdnmg</td>
+                        <td>2.01%</td>
+                        <td>63,094,975,460,872</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>bc1p4...zcaun</td>
+                        <td>1.25%</td>
+                        <td>39,217,088,151,975</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>bc1p8...e0afy</td>
+                        <td>1.11%</td>
+                        <td>34,793,172,982,982</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>bc1pc...y3lhr</td>
+                        <td>0.97%</td>
+                        <td>30,381,575,550,787.222</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>bc1pg...aaygm</td>
+                        <td>0.62%</td>
+                        <td>19,523,808,773,780</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>bc1qv...8xphr</td>
+                        <td>0.55%</td>
+                        <td>17,278,209,719,254</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>bc1pg...4xn6a</td>
+                        <td>0.50%</td>
+                        <td>15,590,391,604,104</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>bc1p9...kfnhz</td>
+                        <td>0.37%</td>
+                        <td>11,600,000,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>bc1pm...ggsa4</td>
+                        <td>0.36%</td>
+                        <td>11,208,336,425,582</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>bc1pl...ghaq3</td>
+                        <td>0.32%</td>
+                        <td>10,000,000,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>bc1pq...x58cg</td>
+                        <td>0.32%</td>
+                        <td>10,000,000,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>bc1pm...cn8tp</td>
+                        <td>0.30%</td>
+                        <td>9,566,900,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>13</td>
+                        <td>bc1pa...km54f</td>
+                        <td>0.28%</td>
+                        <td>8,676,779,709,918</td>
+                    </tr>
+                    <tr>
+                        <td>14</td>
+                        <td>bc1pk...c3mgk</td>
+                        <td>0.27%</td>
+                        <td>8,605,600,000,000.88</td>
+                    </tr>
+                    <tr>
+                        <td>15</td>
+                        <td>bc1pf...frfry</td>
+                        <td>0.26%</td>
+                        <td>8,222,552,038,970</td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>bc1pw...ttvg8</td>
+                        <td>0.24%</td>
+                        <td>7,625,167,969,761.769</td>
+                    </tr>
+                    <tr>
+                        <td>17</td>
+                        <td>bc1pr...gs7jz</td>
+                        <td>0.22%</td>
+                        <td>7,056,707,710,702.101</td>
+                    </tr>
+                    <tr>
+                        <td>18</td>
+                        <td>bc1ps...vnfql</td>
+                        <td>0.22%</td>
+                        <td>6,929,751,044,378</td>
+                    </tr>
+                    <tr>
+                        <td>19</td>
+                        <td>bc1pn...dggef</td>
+                        <td>0.22%</td>
+                        <td>6,821,387,659,887</td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>bc1pk...ufp04</td>
+                        <td>0.22%</td>
+                        <td>6,800,783,208,208</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </section>
   </main>
